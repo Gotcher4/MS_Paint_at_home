@@ -1,7 +1,10 @@
-module cursor_pos #(parameter colour = 12'hFFF, width = 160, height = 120)(input logic clk, reset,
+module cursor_pos #(parameter width = 160, height = 120)(input logic clk, reset,
                   input logic b_up, b_down, b_right, b_left,
+                  input logic [11:0] switches_inputs,
+                  input logic cursor_write,
                   output logic [14:0] cursor_pixel,
-                  output logic [11:0] cursor_colour
+                  output logic [11:0] cursor_colour,
+                  output logic cursor_enable
                   );
 
 logic signed [15:0] pos;
@@ -66,5 +69,6 @@ always_ff @(posedge clk) begin
 end
 //assign button_pressed = b_up || b_down || b_left || b_right;
 assign cursor_pixel = pos[14:0];
-assign cursor_colour = colour;
+assign cursor_colour = switches_inputs[11:0];
+assign cursor_enable = cursor_write;
 endmodule

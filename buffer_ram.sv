@@ -8,8 +8,8 @@ module buffer_ram(input logic clk, we,
         $readmemh("hex_screen.txt", RAM, 0, 19199);
         
     always @(posedge clk) begin
-        if(we)
-            RAM[a] <= wd;
+        if(we) 
+            RAM[a] = wd;
         rd = RAM[a];
     end
         
