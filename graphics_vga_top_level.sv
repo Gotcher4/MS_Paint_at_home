@@ -29,11 +29,12 @@ assign reset_address = (reset)? clear_pos: address;
 assign print_colour = (reset)? clear_colour: cursor_colour;
 pixel_display PIX_COUNT(.clk(clk),
                         .reset(reset),
+                        .cursor_pos(cursor_pixel),
                         .current_pixel(current_pixel),
                         .Hsync(Hsync),
                         .Vsync(Vsync),
                         .vga_colour_out(vga_colour),
-                        .switches_inputs(rd),
+                        .ram_read(rd),
                         .screen_on(screen_on)
                         );
 buffer_ram PICTURE(.clk(clk),

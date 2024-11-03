@@ -9,8 +9,8 @@ module buffer_ram(input logic clk, we,
         
     always @(posedge clk) begin
         if(we) 
-            RAM[a] = wd;
-        rd = RAM[a];
+            RAM[a] <= wd;
+        rd <= RAM[a];
     end
         
 endmodule

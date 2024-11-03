@@ -2,7 +2,8 @@ module pixel_display #(parameter res_w = 640, res_h = 480, h_fp = 16, h_bp = 48,
                      (
                      input logic clk,
                      input logic reset,
-                     input logic [11:0] switches_inputs,
+                     input logic [11:0] ram_read,
+                     input logic [14:0] cursor_pos,
                      output logic [14:0] current_pixel,
                      output logic Hsync,
                      output logic Vsync,
@@ -14,6 +15,7 @@ logic [9:0] h_point;
 logic [9:0] v_point;
 logic [11:0] h_pix;
 logic [11:0] v_pix;
+logic [11:0] vga_background; 
 logic [1:0] div;
 logic tick;
 //logic screen_on;
@@ -69,7 +71,7 @@ always_ff @(posedge clk)
     if(reset)
         now_pixel <= 0;
     else if(screen_on)
-        now_pixel = (v_pix * 160) + h_pix;
+        now_pixel <= (v_pix * 160) + h_pix;
     else
         now_pixel <= now_pixel; 
         
@@ -95,7 +97,8 @@ assign screen_on = ((h_point > h_bp-1 && h_point < (res_w + h_bp)) &&
                     (v_point > v_bp -1 && v_point < (res_h + v_bp)))? 1:0;
 assign Hsync = (h_point < (res_w+ h_fp + h_bp))? 0:1;
 assign Vsync = (v_point < (res_h + v_fp+ v_bp))? 0:1; 
-assign vga_colour_out = (screen_on)? switches_inputs[11:0]:12'h000;
+assign vga_background = (screen_on)? ram_read[11:0]:12'h000;
+assign vga_colour_out = (cursor_pos == now_pixel)? 12'h000: vga_background;
 assign current_pixel = now_pixel;        
                      
 endmodule
